@@ -13,7 +13,6 @@
 
 // **  Trying to make a mouse encoder scroll wheel with 4 buttons.
 
-
 #include <Mouse.h>
 #include <Encoder.h>
 
@@ -116,4 +115,3 @@ int clickStateRight = digitalRead(mouseButtonRight);
       change=0;
    }
   }
-
