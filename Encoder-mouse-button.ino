@@ -11,6 +11,9 @@
  // You should have received a copy of the GNU General Public License
  // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+// **  Trying to make a mouse encoder scroll wheel with 4 buttons.
+
+
 #include <Mouse.h>
 #include <Encoder.h>
 
@@ -49,33 +52,27 @@ void loop(){
 int clickStateLeft = digitalRead(mouseButtonLeft);
 int clickStateRight = digitalRead(mouseButtonRight);
 
-  // if the mouse button is pressed:
+  
   if (clickStateLeft == HIGH) {
-    // if the mouse is not pressed, press it:
     if (!Mouse.isPressed(MOUSE_LEFT)) {
       Mouse.press(MOUSE_LEFT);
       Serial.println("mouseButton_Left");  
       delay(200);
     }
   }
-  // else the mouse button is not pressed:
-  else {
-    // if the mouse is pressed, release it:
+  else {   
     if (Mouse.isPressed(MOUSE_LEFT)) {
       Mouse.release(MOUSE_LEFT);
     }
   }
     if (clickStateRight == HIGH) {
-    // if the mouse is not pressed, press it:
     if (!Mouse.isPressed(MOUSE_RIGHT)) {
       Mouse.press(MOUSE_RIGHT);
       Serial.println("mouseButton_Right");
     delay(200);
     }
   }
-  // else the mouse button is not pressed:
   else {
-    // if the mouse is pressed, release it:
     if (Mouse.isPressed(MOUSE_RIGHT)) {
       Mouse.release(MOUSE_RIGHT);
     }
@@ -104,21 +101,19 @@ int clickStateRight = digitalRead(mouseButtonRight);
         hChange=change*hFactor;
         if((signed)h+hChange<0) h=1541; //prevent int underflow
             else if(h+hChange>1541) h=0; //prevent int overflow
-        else h+=hChange;
-  
-  {      Mouse.move(0,0,+change/scrollFactor);
+        else h+=hChange;{      
+         
+         Mouse.move(0,0,+change/scrollFactor);
     
       }
       Serial.print("pos: ");
       Serial.println(newPosition);
       Serial.print("change: ");
       Serial.println(change);
-
       Serial.print("Scroll: ");
       Serial.println(-change/scrollFactor);
       Serial.println();
-
       change=0;
-  }
    }
+  }
 
