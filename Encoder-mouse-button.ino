@@ -1,15 +1,3 @@
- // This program is free software: you can redistribute it and/or modify
- // it under the terms of the GNU General Public License as published by
- // the Free Software Foundation, either version 3 of the License, or
- // (at your option) any later version.
- //
- // This program is distributed in the hope that it will be useful,
- // but WITHOUT ANY WARRANTY; without even the implied warranty of
- // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- // GNU General Public License for more details.
- //
- // You should have received a copy of the GNU General Public License
- // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // **  Trying to make a mouse encoder scroll wheel with 4 buttons.
 
@@ -17,10 +5,8 @@
 #include <Encoder.h>
 
 static unsigned encA=2, encB=3, encBTN=4;
+static unsigned scrollFactor=4;
 
-//scaling:
-static unsigned hFactor=10, vFactor=5, scrollFactor=4;
-unsigned h=0, v=255;
 
 Encoder myEnc(encA, encB);
 
@@ -28,23 +14,18 @@ long oldPosition  = -999;
 
 const int mouseButtonLeft = 6;
 const int mouseButtonRight = 8;
-
-
 int buttonState = 0;   
 
 void setup(){
   
-  pinMode(mouseButtonLeft, INPUT);
-  pinMode(mouseButtonRight, INPUT);  
-  pinMode(encBTN,INPUT);
+  pinMode(mouseButtonLeft,INPUT_PULLUP);
+  pinMode(mouseButtonRight,INPUT_PULLUP);  
+  //pinMode(encBTN,INPUT);
   Serial.begin(9600);
   Mouse.begin();   
 }
 
 int change=0;
-int hChange=0;
-int vChange=0;
-
 
 void loop(){
 
@@ -85,33 +66,8 @@ int clickStateRight = digitalRead(mouseButtonRight);
     oldPosition = newPosition;
     }
     
-  if(change<-3 || change>3) 
-
-      if(digitalRead(encBTN))  //VALUE
-      {
-        vChange=change*vFactor;
-        if((signed)v+vChange<0) v=0; //prevent int underflow
-        else if(v+vChange>255) v=255; //prevent int overflow
-        else v+=vChange;
+  if(change<-3 || change>3) {
+    Mouse.move(0,0,+change/scrollFactor);
+    change=0;
       }
-
-      else //HUE
-      {
-        hChange=change*hFactor;
-        if((signed)h+hChange<0) h=1541; //prevent int underflow
-            else if(h+hChange>1541) h=0; //prevent int overflow
-        else h+=hChange;{      
-         
-         Mouse.move(0,0,+change/scrollFactor);
-    
-      }
-      Serial.print("pos: ");
-      Serial.println(newPosition);
-      Serial.print("change: ");
-      Serial.println(change);
-      Serial.print("Scroll: ");
-      Serial.println(-change/scrollFactor);
-      Serial.println();
-      change=0;
-   }
-  }
+      }  
